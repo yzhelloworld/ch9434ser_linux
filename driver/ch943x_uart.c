@@ -71,7 +71,7 @@ static int ch943x_set_baud(struct uart_port *port, int baud)
     /* Put LCR back to the normal mode */
     ch943x_port_write(port, CH943X_LCR_REG, lcr);
 
-    return DIV_ROUND_CLOSEST(clk / 16, dll | (dlm << 8));
+    return 0;
 }
 
 static void ch943x_handle_rx(struct uart_port *port, u32 rxlen, u8 iir, u8 lsr)
@@ -655,7 +655,7 @@ static void ch943x_set_termios(struct uart_port *port, struct ktermios *termios,
     /* Get baud rate generator configuration */
     baud = uart_get_baud_rate(port, termios, old, port->uartclk / 16 / 0xffff, port->uartclk / 16 * 24);
     /* Setup baudrate generator */
-    baud = ch943x_set_baud(port, baud);
+    ch943x_set_baud(port, baud);
     uart_update_timeout(port, termios->c_cflag, baud);
 }
 
